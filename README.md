@@ -8,6 +8,13 @@ A Streamlit app serves a scikit-learn model on Google Cloud Run.
 
 > Demo only. The model is trained on synthetic data and is not for clinical use. Do not enter real patient information.
 
+This is a graphical demo of the triage acuity prediction model. Users can input patient information through the Streamlit interface and receive predicted acuity levels in real-time. As you can see in the figures below:
+
+<div style="text-align: center;">
+  <img src="imgs/ss-frontend-01.png" alt="Centered image" style="display: block; margin: 0 auto;">
+  <img src="imgs/ss-frontend-02.png" alt="Centered image" style="display: block; margin: 0 auto;">
+</div>
+
 ## Requirements
 
 - Python 3.13 (it must match the version used to save the model)
