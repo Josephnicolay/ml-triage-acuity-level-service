@@ -1,0 +1,18 @@
+# Allowlist for `gcloud builds submit` (it ignores .dockerignore).
+*
+!Dockerfile
+!.dockerignore
+!cloudbuild.yaml
+!service.yaml
+!gcr-service-policy.yaml
+!requirements-serve.txt
+!models/
+models/*
+!models/baseline_model.pkl
+!src/
+!src/app/
+!src/app/**
+!src/triage/
+!src/triage/**
+**/__pycache__/
+**/*.pyc

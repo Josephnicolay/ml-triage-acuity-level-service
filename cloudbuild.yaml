@@ -1,0 +1,32 @@
+# Run manually (no triggers):
+#   gcloud builds submit --config cloudbuild.yaml \
+#     --substitutions=_REGION=REGION_PLACEHOLDER,_REPO=REPO_PLACEHOLDER
+substitutions:
+  _REGION: us-central1      
+  _REPO: repositorio-mlops          
+  _SERVICE: triage-demo
+  _TAG: demo
+
+steps:
+  - id: build
+    name: gcr.io/cloud-builders/docker
+    args: ["build", "-t", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}", "."]
+
+  - id: push
+    name: gcr.io/cloud-builders/docker
+    args: ["push", "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}"]
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        sed -e "s|IMAGE_PLACEHOLDER|${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}|" \
+            -e "s|REGION_PLACEHOLDER|${_REGION}|" service.yaml > /workspace/service.rendered.yaml
+        gcloud run services replace /workspace/service.rendered.yaml --region ${_REGION}
+        # Public access is applied once by a human (the build SA lacks run.services.setIamPolicy):
+        #   gcloud run services set-iam-policy ${_SERVICE} gcr-service-policy.yaml --region ${_REGION}
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:${_TAG}

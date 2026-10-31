@@ -1,0 +1,38 @@
+# Virtual environments
+.venv/
+venv/
+env/
+.env/
+
+# Sensitive data / secrets
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
+service-account*.json
+secrets/
+
+# Patient / proprietary data
+data/
+
+# Large trained model artifacts
+models/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,8 @@
+# Allowlist: ignore everything, then re-include only what the image needs.
+*
+!requirements-serve.txt
+!models/baseline_model.pkl
+!src/triage/**
+!src/app/**
+**/__pycache__
+**/*.pyc

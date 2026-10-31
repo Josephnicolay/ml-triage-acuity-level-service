@@ -1,0 +1,7 @@
+# Makes the service publicly invokable (demo only).
+# Apply: gcloud run services set-iam-policy triage-demo gcr-service-policy.yaml --region REGION_PLACEHOLDER
+# An org policy (domain-restricted sharing) may block allUsers.
+bindings:
+  - members:
+      - allUsers
+    role: roles/run.invoker

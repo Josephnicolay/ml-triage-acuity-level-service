@@ -1,0 +1,40 @@
+# Cloud Run service spec (Knative format). Apply with `gcloud run services replace`.
+# IMAGE_PLACEHOLDER is substituted by cloudbuild.yaml. Values marked TODO are placeholders.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: triage-demo
+  labels:
+    cloud.googleapis.com/location: us-central1   
+  annotations:
+    run.googleapis.com/ingress: all                      # public demo
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0"            # set to "1" during the live demo
+        autoscaling.knative.dev/maxScale: "3"            # cost/abuse guard
+        run.googleapis.com/startup-cpu-boost: "true"
+        run.googleapis.com/sessionAffinity: "true"       # Streamlit uses WebSockets
+    spec:
+      # serviceAccountName: SERVICE_ACCOUNT_PLACEHOLDER    # use the Compute Engine default service account
+      containerConcurrency: 20                           # starting point, not benchmarked
+      timeoutSeconds: 3600                               # long-lived WebSocket sessions
+      containers:
+        - image: IMAGE_PLACEHOLDER
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MODEL_PATH
+              value: /app/models/baseline_model.pkl
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi                                
+          startupProbe:
+            httpGet:
+              path: /_stcore/health
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 3
+            failureThreshold: 20

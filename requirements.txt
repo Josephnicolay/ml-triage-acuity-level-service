@@ -1,0 +1,14 @@
+numpy
+pandas
+matplotlib
+seaborn
+load-dotenv
+joblib
+scikit-learn
+lightgbm
+transformers
+torch
+torchvision
+optuna
+shap
+ipykernel
